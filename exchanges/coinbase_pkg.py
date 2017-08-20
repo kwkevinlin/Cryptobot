@@ -1,11 +1,11 @@
 from coinbase.wallet.client import Client
 from pprint import pprint
-# TODO instead of hardcoding BTC and ETH formulas separately, use API .account to simplify code
 
 
 class Coinbase:
     def __init__(self, config, user, verbose):
         # TODO: Add JSON schema validation to main.py
+        # TODO: Verify Coinbase SDK: UserWarning: Please supply API version (YYYY-MM-DD) as CB-VERSION header
         api_key = config[user]["coinbase_api"]["key"]
         api_secret = config[user]["coinbase_api"]["secret"]
 
@@ -67,10 +67,10 @@ class Coinbase:
             """
             for transaction in transactions.data:
                 if transaction.status != "completed":
-                        print("\tIncomplete transaction...")
-                        continue
+                    print("\tIncomplete transaction...")
+                    continue
 
-            # Calculate for each transaction type
+                # Calculate for each transaction type
                 # Calculate all BUYS
                 if transaction.type == "buy":
                     transaction_id = transaction.buy.id
@@ -78,19 +78,19 @@ class Coinbase:
                                                                    transaction_id)
 
                     # Calculate price point during purchase
-                    amount_paid = float(transaction_detail.subtotal.amount)  # USD paid before fees
-                    coins_bought = float(transaction_detail.amount.amount)  # Total coins received from purchase
-                    purchase_price = amount_paid / coins_bought  # Price of BTC/ETH at time of buying
+                    amount_paid = float(transaction_detail.subtotal.amount)     # USD paid before fees
+                    coins_bought = float(transaction_detail.amount.amount)      # Total coins received from purchase
+                    purchase_price = amount_paid / coins_bought                 # Price of BTC/ETH at time of buying
                     amount_paid_fees = float(transaction.native_amount.amount)  # USD paid after fees (total paid)
 
-                    # Turn into dict
+                    # TODO: Do this next -- turn into dictionary
                     # self.total_paid_fees = {}
+                    # self.total_paid_fees[currency]
 
                     # Calculate profit-loss
                     if currency == "BTC":
                         self.accumulated_profit_btc -= amount_paid_fees
                         self.total_btc_paid_fees += amount_paid_fees
-                        # self.total_paid_fees[currency]
                     elif currency == "ETH":
                         self.accumulated_profit_eth -= amount_paid_fees
                         self.total_eth_paid_fees += amount_paid_fees
@@ -115,26 +115,28 @@ class Coinbase:
                     if (self.verbose):
                         print("\t{} transaction: {}".format(transaction.type.title(), amount_received))
 
-            # Add current Coinbase balance + current external balance to profit/Loss
+            # Calculate total profit/loss
+            # Add current Coinbase balance + current external balance to profit/loss
             if currency == "BTC":
-                # BTC_external_value = BTC_external_balance * self.btc_current_price
                 account.balance.amount = float(account.balance.amount)
                 self.accumulated_profit_btc += (BTC_external_balance + account.balance.amount) * self.current_btc_price
                 self.percent_profit_btc = self.accumulated_profit_btc / self.total_btc_paid_fees
                 self.total_btc_balance = (BTC_external_balance + account.balance.amount) * self.current_btc_price
             elif currency == "ETH":
-                # ETH_external_value = ETH_external_balance * self.eth_current_price
                 account.balance.amount = float(account.balance.amount)
                 self.accumulated_profit_eth += (ETH_external_balance + account.balance.amount) * self.current_eth_price
                 self.percent_profit_eth = self.accumulated_profit_eth / self.total_eth_paid_fees
                 self.total_eth_balance = (ETH_external_balance + account.balance.amount) * self.current_eth_price
-            # Print accumulated profit/loss
+
             if currency == "BTC":
                 print("\nProfit/Loss ({}): ${:.2f} or {:.2f}%".format(currency, self.accumulated_profit_btc, (self.percent_profit_btc * 100)))
             elif currency == "ETH":
                 print("\nProfit/Loss ({}): ${:.2f} or {:.2f}%\n".format(currency, self.accumulated_profit_eth, (self.percent_profit_eth * 100)))
 
-        # Print balance start --> balance now
+        # TODO: Fix this comment
+        # TODO: `total_paid_fees` var name
+        # TODO: Verify `total_paid_fees` value
+        # Calculate how much you paid --> crypto assets in USD + profits you took out
         self.total_accumulated_profit = self.accumulated_profit_btc + self.accumulated_profit_eth
         self.total_paid_fees = self.total_btc_paid_fees + self.total_eth_paid_fees
         self.total_acc_balance = self.total_btc_balance + self.total_eth_balance + self.total_eth_received + self.total_btc_received
