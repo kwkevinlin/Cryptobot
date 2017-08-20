@@ -1,6 +1,8 @@
 {
-    "coinbase_api": {
-        "key": "yourCoinbaseAPIKey",
-        "secret": "yourCoinbaseAPISecret"
+    "user1": {
+        "coinbase_api": {
+            "key": "user1CoinbaseAPIKey",
+            "secret": "user1CoinbaseAPISecret"
+        }
     }
 }
