@@ -6,8 +6,8 @@ from pprint import pprint
 class Coinbase:
     def __init__(self, config, user, verbose):
         # TODO: Add JSON schema validation to main.py
-        api_key = config[user]["coinbase_api"][key]
-        api_secret = config[user]["coinbase_api"][secret]
+        api_key = config[user]["coinbase_api"]["key"]
+        api_secret = config[user]["coinbase_api"]["secret"]
 
         self.client = Client(api_key, api_secret)
 
@@ -51,21 +51,20 @@ class Coinbase:
         # Read each account
         for account in accounts.data:
             currency = account.balance.currency
-            if currency in ("USD", "LTC") or account.name == "My Vault":  # Ignore these accounts
-                # TODO add USD wallet
+            # TODO add support for USD wallet
+            if currency in ("USD", "LTC") or account.name == "My Vault":
                 continue
-            print(currency)
 
             print("Calculating currency: {}".format(currency))
             print("{}: {} {}".format(account.name, account.balance.amount, currency))
 
             # Get all transactions
-            transactions = account.get_transactions(start_after="1805ae5b-f65b-5825-b780-9c6cecdec1cf", limit=100)
-            """ Documentation for argument syntax in get_transactions
+            transactions = account.get_transactions(limit=100)
+            """ TODO regex or some way to find pagination start_after
+                https://stackoverflow.com/questions/44351034/pagination-on-coinbase-python-api
+                Coinbase SDK code for get_transactions
                 https://github.com/coinbase/coinbase-python/blob/f9ed2249865c2012e3b86106dad5f8c6068366ed/coinbase/wallet/model.py#L168
             """
-            # TODO regex or some way to find everyones start_after
-            # https://stackoverflow.com/questions/44351034/pagination-on-coinbase-python-api
             for transaction in transactions.data:
                 if transaction.status != "completed":
                         print("\tIncomplete transaction...")
