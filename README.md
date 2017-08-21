@@ -21,11 +21,10 @@ This is an on-going project to create a useful bot to track your personal crypto
 4. Select the accounts you wish the bot to be able to operate on
 5. Select all API read permissions
 6. ***Note:** This bot does not require buy, sell, or transfer permissions*
-<img src="https://raw.githubusercontent.com/kwkevinlin/Cryptobot/master/images/coinbase_permissions.jpg" height="536" width="490">
-5. Enter the new API credentials into `config.json`
-6. Keep the API key safe as Coinbase will no longer show you the key
-7. Run Cryptobot via `python3 cryptobot.py -u user -e 300 -v`
-7. `-u` specifies the credential set in config.json to use. `-e` stands for Ethereum
+    <img src="https://raw.githubusercontent.com/kwkevinlin/Cryptobot/master/images/coinbase_permissions.jpg" height="536" width="490">
+5. Enter API information from step 3 into `config.json`
+6. Remember to keep the API key safe as the key will no longer be visible on Coinbase
+7. Run Cryptobot via `python3 cryptobot.py -u user -e 300 -v` (see run configurations below)
 
 ### Run configurations:
 Cryptobot takes the following command line arguments
