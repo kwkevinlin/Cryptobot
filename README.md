@@ -1,27 +1,34 @@
 # Cryptobot
-This is an on-going project to create a useful bot for tracking your cryptocurrency portfolio.  
+This is an on-going project to create a useful bot to track your personal cryptocurrency portfolios.
 
-<b>Exchanges supported:</b> Coinbase  
-<b>Info needed:</b> API key 
+**Exchanges supported:** Coinbase  
+**Info needed:** API key 
 
-Current features:
+### Current features:
 - List all transactions by coin
 - Calculate profit/loss for each coin (value in USD, % change)
 - Calculate profit/loss for entire portfolio
 - Supports multiple accounts within Coinbase and allows manual input of external balances
 
-Future features:
+### Future features:
 - Support other exchanges (Bittrex, Kraken)
 - Automate external balance import from other exchanges/Coinigy
 
-Installation steps:
-0. Open Terminal
-1. Type ```"sudo apt install python3-pip"```
-2. Type ```"sudo pip3 install coinbase"```
-3. Log on CoinBase. Navigate to Settings --> API Access --> + New API Key
-4. Select the accounts you want to use the bot on and all permissions that end in ":read"
-![(Picture)](https://raw.githubusercontent.com/kwkevinlin/Cryptobot/master/images/Screen%20Shot%202017-08-14%20at%207.10.24%20PM.jpg)
-5. Record your API public and secret key somewhere safe
-6. Enter your API keys into config.json
-7. Type ```"python3 main.py"``` in Terminal to run script
+### Installation steps:
+1. These steps assume python3 and pip3 are already installed
+3. Install the official Coinbase Python SDK `sudo pip3 install coinbase`
+3. In Coinbase, navigate to **Settings** -> **API Access** -> **New API Key** to generate a new set of API credentials
+4. Select the accounts you wish the bot to be able to operate on
+5. Select all API read permissions
+6. ***Note:** This bot does not require buy, sell, or transfer permissions*
+<img src="https://raw.githubusercontent.com/kwkevinlin/Cryptobot/master/images/coinbase_permissions.jpg" height="536" width="490">
+5. Enter the new API credentials into `config.json`
+6. Keep the API key safe as Coinbase will no longer show you the key
+7. Run Cryptobot via `python3 cryptobot.py -u user -e 300 -v`
+7. `-u` specifies the credential set in config.json to use. `-e` stands for Ethereum
 
+### Run configurations:
+Cryptobot takes the following command line arguments
+- `-u, --user`: Specifies the credential set in `config.json` to use
+- `-e, --ethereum`: Sets the current ethereum price for profit calculations (Coinbase SDK does not return this value correctly)
+- `-v, --verbose`: Extra printout on transaction details
